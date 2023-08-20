@@ -12,15 +12,15 @@ This module focuses on raw downloading with a minimalist data structure. Various
 
 ## Quickstart
 
-node
-```
+**terminal**
+```js
 npm init -y
 npm i repo2file
 ```
 
-index.mjs
+**index.mjs**
 
-```
+```js
 import { Repo2File } from 'repo2file'
 
 const repo2file = new Repo2File()
