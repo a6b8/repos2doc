@@ -1,6 +1,6 @@
 {
   "name": "repo2file",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "src/Repo2File.mjs",
   "scripts": {
