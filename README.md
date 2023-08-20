@@ -31,6 +31,10 @@ await repo2file.single( {
 } )
 ```
 
+```bash
+node index.mjs
+```
+
 ## Table of Contents
 
 - [Repo 2 File](#repo-2-file)
