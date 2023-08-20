@@ -14,8 +14,7 @@ This module focuses on raw downloading with a minimalist data structure. Various
 
 **terminal**
 ```bash
-npm init -y
-npm i repo2file
+npm init -y && npm i repo2file
 ```
 
 **index.mjs**
