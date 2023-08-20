@@ -3,6 +3,12 @@ import fs from 'fs'
 import { Repo2File } from './../src/Repo2File.mjs'
 const repo2file = new Repo2File()
 
+process.exit( 1 )
+
+/*
+->>> PHANTOM JS PROBLEM with circleci
+
+
 const cmd = {
     'userName': 'a6b8',
     'repository': 'mina-ns',
@@ -56,3 +62,4 @@ if( fs.existsSync( folderPath ) ) {
     console.log( '> Folder not found!' )
     process.exit( 0 )
 }
+*/
