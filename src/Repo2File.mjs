@@ -84,7 +84,7 @@ export class Repo2File {
         !silent ? process.stdout.write( 'clone > ' ) : ''
         const files = await clone.start( { userName, repository, branch } )
 
-        !silent ? process.stdout.write( 'markdow to pdf > ' ) : ''
+        !silent ? process.stdout.write( 'markdown to pdf > ' ) : ''
         const a = await convert.start( { userName, repository, branch, files } )
 
         !silent ? console.log( 'clean up.' ) : ''
