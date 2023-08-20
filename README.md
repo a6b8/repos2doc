@@ -13,7 +13,7 @@ This module focuses on raw downloading with a minimalist data structure. Various
 ## Quickstart
 
 **terminal**
-```js
+```bash
 npm init -y
 npm i repo2file
 ```
