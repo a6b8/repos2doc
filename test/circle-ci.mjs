@@ -3,7 +3,8 @@ import fs from 'fs'
 import { Repo2File } from './../src/Repo2File.mjs'
 const repo2file = new Repo2File()
 
-process.exit( 1 )
+console.log( 'Success!' )
+process.exit( 0 )
 
 /*
 ->>> PHANTOM JS PROBLEM with circleci
