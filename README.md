@@ -17,7 +17,8 @@ This module focuses on raw downloading with a minimalist data structure. Various
 npm init -y && npm i repo2file
 ```
 
-**index.mjs**
+**node**
+index.mjs
 
 ```js
 import { Repo2File } from 'repo2file'
@@ -31,6 +32,7 @@ await repo2file.single( {
 } )
 ```
 
+**terminal**
 ```bash
 node index.mjs
 ```
