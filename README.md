@@ -25,7 +25,8 @@ const repo2gpt = new Repo2GPT()
 
 await repo2gpt.getFile( {
     'repositories': [
-        'EasyMina/easyMina/main'
+        'EasyMina/easyMina/main',
+        'EasyMina/minaData/main'
     ]
 } )
 ```
@@ -41,15 +42,24 @@ node index.mjs
   - [Quickstart](#quickstart)
   - [Table of Contents](#table-of-contents)
   - [Methods](#methods)
-    - [single()](#single)
+    - [getFile()](#getfile)
     - [setConfig()](#setconfig)
   - [Limitations](#limitations)
   - [License](#license)
 
 ## Methods
 
-### single()
-This method allows you to download a repository and save it in the desired format.
+### getFile()
+
+This method downloads the data, saves it in a temporary folder, then combines all the files, and finally moves them to the actual destinationPath. Only 'repositories' is required, and one or more repositories can be specified. For multiple repositories, the data is written sequentially into the document.
+
+| Property        | Type                  | Description                                       | Required   |
+| --------------- | --------------------- | ------------------------------------------------- | ---------- |
+| repositories    | Array of Strings      | GitHub repositories in the format "userName/repositoryName/branchName" | true       |
+| name            | String                | Custom name                                       | false      |
+| outputs         | Array of Strings      | At least one value from: "txt", "md", "pdf"       | false      |
+| destinationPath | String                | Path starting with "./"                           | false      |
+
 
 **Example**
 
@@ -58,10 +68,14 @@ import { Repo2GPT } from 'repo2gpt'
 
 const repo2gpt = new Repo2GPT()
 
-await repo2gpt.single( {
-    'userName': 'EasyMina',
-    'repository': 'easyMina',
-    'branch': 'main',
+await repo2gpt.getFile( {
+    'repositories': [
+        'EasyMina/easyMina/main',
+        'EasyMina/minaData/main'
+    ],
+    'name': 'mina',
+    'destinationPath': './dataTest/',
+    'outputs': [ 'txt', 'md', 'pdf' ],
 } )
 ```
 
@@ -90,15 +104,15 @@ const myOwnConfig = {
     },
     'output': {
         'pdf': {
-            'use': true,
+            'use': false,
             'outputFormat': '{{userName}}--{{repository}}--{{branch}}.pdf'
         },
         'markdown': {
-            'use': true,
+            'use': false,
             'outputFormat': '{{userName}}--{{repository}}--{{branch}}.md'
         },
         'txt': {
-            'use': true,
+            'use': false,
             'outputFormat': '{{userName}}--{{repository}}--{{branch}}.txt'
         }
     },
