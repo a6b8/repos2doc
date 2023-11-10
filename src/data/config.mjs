@@ -7,13 +7,13 @@ let config = {
         'format': moment().format()
     },
     'path': {
-        'root': './repo2file-temp',
-        'route': './repo2file-temp/{{userName}}/{{repository}}/{{branch}}/',
+        'root': './repo2gpt-temp',
+        'route': './repo2gpt-temp/{{userName}}/{{repository}}/{{branch}}/',
         'raw': 'raw/',
         'pdf': ''
     },
     'merge': {
-        'root': './repo2file-temp',
+        'root': './repo2gpt-temp',
         'outputFormat': '{{name}}--{{timestamp}}.{{suffix}}'
     },
     'output': {
