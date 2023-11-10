@@ -12,12 +12,8 @@ export class Repo2GPT {
     #silent
 
 
-    constructor( cfg=null ) {
-        if( cfg === null ) {
-            this.#config = config
-        } else {
-            this.#config = cfg
-        }
+    constructor() {
+        this.#config = config
 
         return true
     }
@@ -57,6 +53,12 @@ export class Repo2GPT {
         }
 
         return true
+    }
+
+
+    setConfig( config ) {
+        this.#config = config
+        return this
     }
 
 

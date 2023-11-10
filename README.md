@@ -3,9 +3,7 @@
 
 # Repo 2 File
 
-This module helps save a repository as a file. There are three available formats: '.txt', '.md', and '.pdf'. Additionally, there's a method to convert all downloaded repositories into a single file.
-
-This module focuses on raw downloading with a minimalist data structure. Various configuration options can be customized by overwriting the config file, see [#config](#config).
+Repo2GPT helps prepare one or multiple GitHub repositories to consolidate their content into a single file. This file, in either `text (.txt)`, `markdown (.md)`, or `pdf (.pdf)` format, can then be uploaded to the OpenAI GPT editor as a searchable document. This enables the AI to answer questions based on the document's content and even generate code. This can be especially valuable for very new software with rapid update cycles.
 
 
 > Designed for AI Embedding Generation
@@ -25,10 +23,10 @@ import { Repo2GPT } from 'repo2gpt'
 
 const repo2gpt = new Repo2GPT()
 
-await repo2gpt.single( {
-    'userName': 'EasyMina',
-    'repository': 'easyMina',
-    'branch': 'main',
+await repo2gpt.getFile( {
+    'repositories': [
+        'EasyMina/easyMina/main'
+    ]
 } )
 ```
 
@@ -44,11 +42,8 @@ node index.mjs
   - [Table of Contents](#table-of-contents)
   - [Methods](#methods)
     - [single()](#single)
-    - [batch()](#batch)
-    - [merge()](#merge)
-  - [Config](#config)
+    - [setConfig()](#setconfig)
   - [Limitations](#limitations)
-  - [Credits](#credits)
   - [License](#license)
 
 ## Methods
@@ -70,47 +65,7 @@ await repo2gpt.single( {
 } )
 ```
 
-### batch()
-
-This method expects an array of `single()` objects. It can be useful when you want to download repositories on a specific topic and later use `merge()` to combine them.
-
-**Example**
-
-```js
-import { Repo2GPT } from 'repo2gpt'
-
-const repo2gpt = new Repo2GPT()
-
-await repo2gpt.batch( [
-        {
-            'userName': 'a6b8',
-            'repository': 'mina-ns',
-            'branch': 'main'
-        },
-        {
-            'userName': 'EasyMina',
-            'repository': 'easyMina',
-            'branch': 'main'
-        }
-    ]
-)
-```
-
-### merge()
-This method copies *all* downloaded repositories into individual files. The default formats are 'pdf', 'markdown', and plain text.
-
-```js
-import { Repo2GPT } from 'repo2gpt'
-
-const repo2gpt = new Repo2GPT()
-
-await repo2gpt.merge( {
-    'name': 'my-collection'
-} )
-
-```
-
-## Config
+### setConfig()
 
 All module settings are stored in a config file, see [./src/data/config.mjs](./src/data/config.mjs). This file can be completely overridden by passing an object during initialization.
 
@@ -208,7 +163,10 @@ const myOwnConfig = {
     }
 }
 
-const repo2gpt = new Repo2GPT( myOwnConfig )
+const repo2gpt = new Repo2GPT()
+repo2gpt
+    .setConfig( myOwnConfig )
+    .getFile( { ... } )
 ```
 
 
@@ -216,9 +174,6 @@ const repo2gpt = new Repo2GPT( myOwnConfig )
 
 - Currently in Alpha Stage
 
-## Credits
-
-- This project was inspired by [repo2pdf](https://github.com/BankkRoll/repo2pdf).
 
 ## License
 
