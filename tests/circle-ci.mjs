@@ -1,7 +1,7 @@
 import fs from 'fs'
 
-import { Repo2File } from './../src/Repo2File.mjs'
-const repo2file = new Repo2File()
+import { Repo2GPT } from './../src/Repo2GPT.mjs'
+const repo2file = new Repo2GPT()
 
 console.log( 'Success!' )
 process.exit( 0 )
