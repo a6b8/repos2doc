@@ -1,4 +1,4 @@
-![CircleCI](https://img.shields.io/circleci/build/github/a6b8/repo2file/main)
+![CircleCI](https://img.shields.io/circleci/build/github/a6b8/repo2gpt/main)
 
 
 # Repo 2 File
@@ -14,18 +14,18 @@ This module focuses on raw downloading with a minimalist data structure. Various
 
 **terminal**
 ```bash
-npm init -y && npm i repo2file
+npm init -y && npm i repo2gpt
 ```
 
 **node**
 index.mjs
 
 ```js
-import { Repo2File } from 'repo2file'
+import { Repo2Gpt } from 'repo2gpt'
 
-const repo2file = new Repo2File()
+const repo2gpt = new Repo2Gpt()
 
-await repo2file.single( {
+await repo2gpt.single( {
     'userName': 'EasyMina',
     'repository': 'easyMina',
     'branch': 'main',
@@ -59,11 +59,11 @@ This method allows you to download a repository and save it in the desired forma
 **Example**
 
 ```js
-import { Repo2File } from 'repo2file'
+import { Repo2Gpt } from 'repo2gpt'
 
-const repo2file = new Repo2File()
+const repo2gpt = new Repo2Gpt()
 
-await repo2file.single( {
+await repo2gpt.single( {
     'userName': 'EasyMina',
     'repository': 'easyMina',
     'branch': 'main',
@@ -77,11 +77,11 @@ This method expects an array of `single()` objects. It can be useful when you wa
 **Example**
 
 ```js
-import { Repo2File } from 'repo2file'
+import { Repo2Gpt } from 'repo2gpt'
 
-const repo2file = new Repo2File()
+const repo2gpt = new Repo2Gpt()
 
-await repo2file.batch( [
+await repo2gpt.batch( [
         {
             'userName': 'a6b8',
             'repository': 'mina-ns',
@@ -100,11 +100,11 @@ await repo2file.batch( [
 This method copies *all* downloaded repositories into individual files. The default formats are 'pdf', 'markdown', and plain text.
 
 ```js
-import { Repo2File } from 'repo2file'
+import { Repo2Gpt } from 'repo2gpt'
 
-const repo2file = new Repo2File()
+const repo2gpt = new Repo2Gpt()
 
-await repo2file.merge( {
+await repo2gpt.merge( {
     'name': 'my-collection'
 } )
 
@@ -116,7 +116,7 @@ All module settings are stored in a config file, see [./src/data/config.mjs](./s
 
 ```js
 
-import { Repo2File } from 'repo2file'
+import { Repo2Gpt } from 'repo2gpt'
 
 const myOwnConfig = {
     'meta': {
@@ -124,13 +124,13 @@ const myOwnConfig = {
         'format': '<<DATE FORMAT>>'
     },
     'path': {
-        'root': './repo2file-temp',
-        'route': './repo2file-temp/{{userName}}/{{repository}}/{{branch}}/',
+        'root': './repo2gpt-temp',
+        'route': './repo2gpt-temp/{{userName}}/{{repository}}/{{branch}}/',
         'raw': 'raw/',
         'pdf': ''
     },
     'merge': {
-        'root': './repo2file-temp',
+        'root': './repo2gpt-temp',
         'outputFormat': '{{name}}--{{timestamp}}.{{suffix}}'
     },
     'output': {
@@ -208,7 +208,7 @@ const myOwnConfig = {
     }
 }
 
-const repo2file = new Repo2File( myOwnConfig )
+const repo2gpt = new Repo2Gpt( myOwnConfig )
 ```
 
 
@@ -222,4 +222,4 @@ const repo2file = new Repo2File( myOwnConfig )
 
 ## License
 
-The module is available as open source under the terms of the [MIT](https://github.com/a6b8/repo2file/blob/main/LICENSE).
+The module is available as open source under the terms of the [MIT](https://github.com/a6b8/repo2gpt/blob/main/LICENSE).

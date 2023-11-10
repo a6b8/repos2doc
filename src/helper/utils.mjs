@@ -1,17 +1,23 @@
-function printMessages( { messages, escape=false } ) {
-    let error = false
-    if( messages.length !== 0 ) {
-        error = true
-        messages
-            .forEach( ( msg, index ) => {
-                index === 0 ? console.log( 'Error:' ) : ''
-                console.log( `- ${msg}`)
-            } )
+function printMessages( { messages=[], comments=[] } ) {
+    const n = [
+        [ comments, 'Comment', false ],
+        [ messages, 'Error', true ]
+    ]
+        .forEach( ( a, index ) => {
+            const [ msgs, headline, stop ] = a
+            msgs
+                .forEach( ( msg, rindex, all ) => {
+                    rindex === 0 ? console.log( `\n${headline}${all.length > 1 ? 's' : ''}:` ) : ''
+                    console.log( `  - ${msg}` )
+                    if( ( all.length - 1 ) === rindex ) {
+                        if( stop === true ) {
+                            process.exit( 1 )
+                        }
+                    }
+                } )
+        } )
 
-        escape !== true ? process.exit( 1 ) : ''
-    }
-
-    return error
+    return true
 }
 
 

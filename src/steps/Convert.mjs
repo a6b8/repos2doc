@@ -237,7 +237,7 @@ export class Convert {
                                     fs.createWriteStream( path.join( this.#state['folderResults'], fileName ) )
                                 )
                                 break
-                            case 'markdown':
+                            case 'md':
                                 fs.writeFileSync( 
                                     path.join( this.#state['folderResults'], fileName ),
                                     contents,
@@ -254,7 +254,6 @@ export class Convert {
 
                     } )
             )
-
 
             return true
         } catch( error ) {

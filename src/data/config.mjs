@@ -18,15 +18,15 @@ let config = {
     },
     'output': {
         'pdf': {
-            'use': true,
+            'use': false,
             'outputFormat': '{{userName}}--{{repository}}--{{branch}}.pdf'
         },
-        'markdown': {
-            'use': true,
+        'md': {
+            'use': false,
             'outputFormat': '{{userName}}--{{repository}}--{{branch}}.md'
         },
         'txt': {
-            'use': true,
+            'use': false,
             'outputFormat': '{{userName}}--{{repository}}--{{branch}}.txt'
         }
     },

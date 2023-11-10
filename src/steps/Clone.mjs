@@ -10,6 +10,7 @@ import { printMessages } from '../helper/utils.mjs'
 export class Clone {
     #config 
     #state
+    #silent
 
 
     constructor( config ) {
@@ -18,7 +19,8 @@ export class Clone {
     }
 
 
-    async start( { userName=null, repository=null, branch=null } ) {
+    async start( { userName=null, repository=null, branch=null, silent=false } ) {
+        this.#silent = silent
         this.#validateUserInput( { userName, repository, branch } ) 
 
         this.#state = {
@@ -41,9 +43,7 @@ export class Clone {
         this.#state['folderRaw'] = `${path}${this.#config['path']['raw']}`
 
         const error = this.#addTemp()
-        if( !error ) {
-            await this.#downloadGithubRepository()
-        }
+        await this.#downloadGithubRepository()
 
         const files = this.#getFilesRecursively( this.#state['folderRaw']  )
 
@@ -52,7 +52,7 @@ export class Clone {
 
 
     #addTemp() {
-        const messages = []
+        const comments = []
 
         const folder = `${this.#state['folderRaw']}`
         if( !fs.existsSync( folder, { 'recursive': true } ) ) {
@@ -61,13 +61,13 @@ export class Clone {
             const files = fs.readdirSync( folder )
             if( files.length === 0 ) {
             } else {
-                messages.push( `Folder: ${folder} is not empty!` )
+                comments.push( `Folder: ${folder} is not empty!` )
             }
         }
 
-        const error = printMessages( { messages, 'escape': false } ) 
+        printMessages( { comments, 'escape': false } ) 
 
-        return error
+        return true
     }
 
 
@@ -86,6 +86,8 @@ export class Clone {
                 }
             )
             fs.rmdirSync( folderPath )
+        } else {
+            console.log( `Key folderPath "${folderPath}" not found.` )
         }
 
         return true
@@ -103,9 +105,12 @@ export class Clone {
                 return acc
             }, this.#config['github']['download'] )
 
+        !this.#silent ? process.stdout.write( 'download .zip > '  ) : ''
         const zip = await this.#download( { url } )
         const path = this.#state['folderRaw'] + 'tmp.zip'
         fs.writeFileSync( path, zip )
+
+        !this.#silent ? process.stdout.write( 'decompress .zip > '  ) : ''
         await decompress( path, this.#state['folderRaw'] )
 
         return true
@@ -113,8 +118,16 @@ export class Clone {
 
 
     async #download( { url } ) {
-        const { data } = await axios.get( url, { responseType: 'arraybuffer' } )
-        return data
+        let result
+        try {
+            const { data } = await axios.get( url, { responseType: 'arraybuffer' } )
+            result = data
+        } catch( e ) {
+            console.log( '\nError:')
+            console.log( ` - Downloading ${url} raised an error.` )
+            process.exit( 1 )
+        }
+        return result
     }
 
 
