@@ -1,7 +1,7 @@
 {
   "name": "repo2gpt",
-  "version": "0.0.6",
-  "description": "",
+  "version": "0.0.7",
+  "description": "Repo2GPT streamlines GitHub repositories into a single file in `text (.txt)`, `markdown (.md)`, or `pdf (.pdf)` format, facilitating uploads to the OpenAI GPT editor for question answering and code generation. Valuable for swiftly evolving software.",
   "main": "src/Repo2File.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
