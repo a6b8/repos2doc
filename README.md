@@ -21,9 +21,9 @@ npm init -y && npm i repo2gpt
 index.mjs
 
 ```js
-import { Repo2Gpt } from 'repo2gpt'
+import { Repo2GPT } from 'repo2gpt'
 
-const repo2gpt = new Repo2Gpt()
+const repo2gpt = new Repo2GPT()
 
 await repo2gpt.single( {
     'userName': 'EasyMina',
@@ -59,9 +59,9 @@ This method allows you to download a repository and save it in the desired forma
 **Example**
 
 ```js
-import { Repo2Gpt } from 'repo2gpt'
+import { Repo2GPT } from 'repo2gpt'
 
-const repo2gpt = new Repo2Gpt()
+const repo2gpt = new Repo2GPT()
 
 await repo2gpt.single( {
     'userName': 'EasyMina',
@@ -77,9 +77,9 @@ This method expects an array of `single()` objects. It can be useful when you wa
 **Example**
 
 ```js
-import { Repo2Gpt } from 'repo2gpt'
+import { Repo2GPT } from 'repo2gpt'
 
-const repo2gpt = new Repo2Gpt()
+const repo2gpt = new Repo2GPT()
 
 await repo2gpt.batch( [
         {
@@ -100,9 +100,9 @@ await repo2gpt.batch( [
 This method copies *all* downloaded repositories into individual files. The default formats are 'pdf', 'markdown', and plain text.
 
 ```js
-import { Repo2Gpt } from 'repo2gpt'
+import { Repo2GPT } from 'repo2gpt'
 
-const repo2gpt = new Repo2Gpt()
+const repo2gpt = new Repo2GPT()
 
 await repo2gpt.merge( {
     'name': 'my-collection'
@@ -116,7 +116,7 @@ All module settings are stored in a config file, see [./src/data/config.mjs](./s
 
 ```js
 
-import { Repo2Gpt } from 'repo2gpt'
+import { Repo2GPT } from 'repo2gpt'
 
 const myOwnConfig = {
     'meta': {
@@ -208,7 +208,7 @@ const myOwnConfig = {
     }
 }
 
-const repo2gpt = new Repo2Gpt( myOwnConfig )
+const repo2gpt = new Repo2GPT( myOwnConfig )
 ```
 
 
