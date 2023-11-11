@@ -42,7 +42,6 @@ node index.mjs
   - [Methods](#methods)
     - [getDocument()](#getdocument)
     - [setConfig()](#setconfig)
-  - [Limitations](#limitations)
   - [License](#license)
 
 ## Methods
@@ -90,10 +89,6 @@ const myOwnConfig = {
 const r4g = new Repo4GPT()
 r4g.setConfig( myOwnConfig ).getDocument( { ... } )
 ```
-
-## Limitations
-
-- Currently in Alpha Stage
 
 ## License
 
