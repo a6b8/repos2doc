@@ -6,7 +6,7 @@ import { Merge } from './steps/Merge.mjs'
 import { printMessages } from './helper/utils.mjs'
 
 
-export class Repo2GPT {
+export class Repo4GPT {
     #config
     #state
     #silent
@@ -19,8 +19,8 @@ export class Repo2GPT {
     }
 
 
-    async getFile( { repositories, name='default', silent=false, outputs=[ 'txt' ], destinationPath='./' } ) {
-        const [ messages, comments ] = this.#validateGetResult( { repositories, name, silent, outputs, destinationPath } )
+    async getFile( { repositories, name='default', silent=false, outputs=[ 'txt' ], destinationFolder='./' } ) {
+        const [ messages, comments ] = this.#validateGetResult( { repositories, name, silent, outputs, destinationFolder } )
         printMessages( { messages, comments } )
 
         this.#silent = silent
@@ -37,7 +37,7 @@ export class Repo2GPT {
                 silent
             } )
 
-            await this.#merge( { name, destinationPath } )
+            await this.#merge( { name, destinationFolder } )
         } else if (
             Array.isArray( repositories ) && 
             repositories.every( item => typeof item === 'string' ) 
@@ -46,7 +46,7 @@ export class Repo2GPT {
             await this.#batch( {
                 'githubRepositories': repositories
             })
-            await this.#merge( { name, destinationPath } )
+            await this.#merge( { name, destinationFolder } )
         } else {
             console.log( `Unknown Error.` )
             process.exit( 1 )
@@ -109,7 +109,7 @@ export class Repo2GPT {
     }
 
 
-    async #merge( { name='collection', destinationPath } ) {
+    async #merge( { name='collection', destinationFolder } ) {
         // !this.#silent ? console.log( '  Merge' ) : ''
         const merge = new Merge( this.#config )
         await merge.start( { 
@@ -118,7 +118,7 @@ export class Repo2GPT {
         } )
 
 
-        merge.cleanUpTemp( { destinationPath } )
+        merge.cleanUpTemp( { destinationFolder } )
 
         return true
     }
@@ -159,18 +159,18 @@ export class Repo2GPT {
     }
 
 
-    #validateGetResult( { repositories, name, silent, outputs, destinationPath } ) {
+    #validateGetResult( { repositories, name, silent, outputs, destinationFolder } ) {
         const messages = []
         const comments = []
 
-        if( typeof destinationPath === 'string' ) {
-            if( destinationPath.startsWith( './' ) === true ) {
+        if( typeof destinationFolder === 'string' ) {
+            if( destinationFolder.startsWith( './' ) === true ) {
 
             } else {
-                messages.push( `Key "destinationPath" need to start with "./".`)
+                messages.push( `Key "destinationFolder" need to start with "./".`)
             }
         } else {
-            messages.push( `Key "destinationPath" is not type of "string".` )
+            messages.push( `Key "destinationFolder" is not type of "string".` )
         }
 
         if( Array.isArray( outputs ) ) {

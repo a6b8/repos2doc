@@ -168,19 +168,19 @@ export class Merge {
     }
 
 
-    cleanUpTemp( { destinationPath } ) {
-        if( typeof destinationPath !== 'string' ) {
-            console.log( `Key "destinationPath" is not type of "string".` )
+    cleanUpTemp( { destinationFolder } ) {
+        if( typeof destinationFolder !== 'string' ) {
+            console.log( `Key "destinationFolder" is not type of "string".` )
             process.exit( 1 )
-        } else if( !destinationPath.startsWith( './' ) ) {
-            console.log( `Key "destinationPath" does not start with "./"` )
+        } else if( !destinationFolder.startsWith( './' ) ) {
+            console.log( `Key "destinationFolder" does not start with "./"` )
             process.exit( 1 )
         }
 
  
         this.#state['files']
             .forEach( sourceFilePath => {
-                this.#cleanUpTempFile( { sourceFilePath, destinationPath } )
+                this.#cleanUpTempFile( { sourceFilePath, destinationFolder } )
             } )  
 
 
@@ -198,13 +198,13 @@ export class Merge {
     }
 
 
-    #cleanUpTempFile( { sourceFilePath, destinationPath } ) {
+    #cleanUpTempFile( { sourceFilePath, destinationFolder } ) {
        // const sourceFilePath = './repo2gpt-temp/merge--1699610939.pdf'
 
-        if( !fs.existsSync( destinationPath ) ) {
-            console.error( `Create Destination "${destinationPath}".` )
+        if( !fs.existsSync( destinationFolder ) ) {
+            console.error( `Create Destination "${destinationFolder}".` )
             fs.mkdirSync( 
-                destinationPath, 
+                destinationFolder, 
                 { 'recursive': true }, 
                 ( err ) => {
                     if( err ) {
@@ -218,7 +218,7 @@ export class Merge {
         }
 
         const targetFilePath = path.join(
-            destinationPath, 
+            destinationFolder, 
             sourceFilePath.split( '/' ).pop() 
         )
 

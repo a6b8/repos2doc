@@ -1,17 +1,31 @@
 {
-  "name": "repo2gpt",
-  "version": "0.0.7",
-  "description": "Repo2GPT streamlines GitHub repositories into a single file in `text (.txt)`, `markdown (.md)`, or `pdf (.pdf)` format, facilitating uploads to the OpenAI GPT editor for question answering and code generation. Valuable for swiftly evolving software.",
-  "main": "src/Repo2File.mjs",
+  "name": "repo4gpt",
+  "version": "0.0.1",
+  "description": "Repo4GPT streamlines GitHub repositories into a single file in `text (.txt)`, `markdown (.md)`, or `pdf (.pdf)` format, facilitating uploads to the OpenAI GPT editor for question answering and code generation. Valuable for swiftly evolving software.",
+  "main": "src/Repo4GPT.mjs",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "repo4gpt": "bin/repo4gpt"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [ "chatgpt", "ai", "gpt" ],
+  "keywords": [
+    "chatgpt",
+    "ai",
+    "gpt"
+  ],
   "author": "a6b8",
   "license": "MIT",
   "dependencies": {
+    "arg": "^5.0.2",
     "axios": "^1.4.0",
     "decompress": "^4.2.1",
+    "esm": "^3.2.25",
+    "figlet": "^1.7.0",
+    "inquirer": "^9.2.12",
     "markdown-escape": "^2.0.0",
     "markdown-pdf": "^11.0.0",
     "moment": "^2.29.4",
