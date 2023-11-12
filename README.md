@@ -11,7 +11,7 @@ Repo2Docs assists in preparing one or multiple GitHub repositories to consolidat
 ### Command Line Interface
 
 ```
-npm -g i repos2doc
+npm install -g repos2doc
 repos2doc
 ```
 
@@ -26,6 +26,7 @@ repos2doc
             |_|                                     
 
 Insert Repositories
+...
 ```
 
 
