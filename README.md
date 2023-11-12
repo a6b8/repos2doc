@@ -10,10 +10,18 @@ Repo2Docs assists in preparing one or multiple GitHub repositories to consolidat
 
 ### Command Line Interface
 
+1. Open your Terminal and install repos2doc
 ```
 npm install -g repos2doc
+```
+
+2. Run repos2doc
+```
 repos2doc
 ```
+
+3. Use as Example: `a6b8/repos2doc, a6b8/satNames` which create a document, out of 2 repositories
+
 
 Example: `a6b8/repos2doc, a6b8/satNames`
 
