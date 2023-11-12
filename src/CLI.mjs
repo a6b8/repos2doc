@@ -34,8 +34,6 @@ export class CLI {
                     'type': 'string'
                 }
             }
-            
-
         }
     }
 
@@ -136,10 +134,18 @@ export class CLI {
 
         const response = await inquirer.prompt( questions )
 
-        const cmds = response['answer']
+        let cmds = response['answer']
             .trim()
             .split( ',' )
-            .map( a => a.trim() )
+            .map( cmd => {
+                cmd = cmd.trim() 
+                const matches = cmd.match( /\//g )
+                const count = matches ? matches.length : 0
+                if( count === 1 ) {
+                    cmd = `${cmd}/main`
+                }
+                return cmd
+            } )
 
         const table = getTableInAscii( { 
             'headlines': this.#config['tables']['repositories']['headlines'] , 
@@ -153,7 +159,7 @@ export class CLI {
         if( ok['sure'] ) {
             return cmds
         } else {
-            await this.#questionRepositories( { 'str': '' } )
+            cmds = await this.#questionRepositories( { 'str': '' } )
         }
 
         return cmds
@@ -194,16 +200,21 @@ export class CLI {
         } else if( input === '' ) {
             messages.push( 'input is empty' )
         } else {
-            input
+            input = input
                 .trim()
                 .split( ',' )
                 .map( a => a.trim() )
                 .forEach( ( cmd, rindex ) => {
                     const matches = cmd.match( /\//g )
                     const count = matches ? matches.length : 0
-                    if( count !== 2 ) {
-                        messages.push( `[${rindex}] ${cmd} expect 2 slashes "/".`)
+
+                    if( count === 0 ) {
+                        messages.push( `[${rindex}] "${cmd}" expect as structure "name/repo/branch", `)
                     } else {
+                        if( count === 1 ) {
+                            cmd = `${cmd}/main`
+                        }
+
                         const keys = cmd
                             .split( '/' )
                             .forEach( ( key, index ) => {
@@ -217,6 +228,8 @@ export class CLI {
                     }
                 } )
         }
+
+
 
         return messages
     }

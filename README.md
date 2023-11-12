@@ -2,7 +2,7 @@
 
 # Repos 2 Doc
 
-Repo2Docs assists in preparing one or multiple GitHub repositories to consolidate their content into a single file. This file can be in one of the following formats: `text (.txt)`, `markdown (.md)`, or `pdf (.pdf)`. You can then upload this file to the OpenAI GPT editor as a searchable document. This enables the AI to answer questions based on the document's content and even generate code. This can be especially valuable for very new software with rapid update cycles.
+Repos2Doc assists in preparing one or multiple GitHub repositories to consolidate their content into a single file. This file can be in one of the following formats: `text (.txt)`, `markdown (.md)`, or `pdf (.pdf)`. You can then upload this file to the OpenAI GPT editor as a searchable document. This enables the AI to answer questions based on the document's content and even generate code. This can be especially valuable for very new software with rapid update cycles.
 
 > Designed for AI Embedding Generation
 
@@ -50,9 +50,9 @@ npm init -y && npm i repos2doc
 index.mjs
 
 ```js
-import { Repo2Docs } from 'repos2doc'
+import { Repos2Doc } from 'repos2doc'
 
-const r4g = new Repo2Docs()
+const r4g = new Repos2Doc()
 await r4g.getDocument( {
     'repositories': [
         'EasyMina/easyMina/main',
@@ -76,6 +76,7 @@ node index.mjs
   - [Methods](#methods)
     - [getDocument()](#getdocument)
     - [setConfig()](#setconfig)
+    - [constructor()](#constructor)
   - [License](#license)
 
 ## Methods
@@ -94,9 +95,9 @@ This method downloads the data, saves it in a temporary folder, then combines al
 **Example**
 
 ```js
-import { Repo2Docs } from 'repos2doc'
+import { Repos2Doc } from 'repos2doc'
 
-const r4g = new Repo2Docs()
+const r4g = new Repos2Doc()
 
 await r4g.getDocument( {
     'repositories': [
@@ -114,15 +115,27 @@ await r4g.getDocument( {
 All module settings are stored in a config file, see [./src/data/config.mjs](./src/data/config.mjs). This file can be completely overridden by passing an object during initialization.
 
 ```js
-import { Repo2Docs } from 'repos2doc'
+import { Repos2Doc } from 'repos2doc'
 
 const myOwnConfig = {
     // Your custom configuration here
 }
 
-const r4g = new Repo2Docs()
-r4g.setConfig( myOwnConfig ).getDocument( { ... } )
+const r4g = new Repos2Doc()
+r4g
+    .setConfig( { myOwnConfig } )
+    .getDocument( { ... } )
 ```
+
+### constructor()
+
+The constructor can be provided with a variable used to suppress the displayed terminal messages. By default, `silent` is set to `false`.
+
+```js
+const silent = true
+const r2d = new Repos2Doc( silent )
+```
+
 
 ## License
 
