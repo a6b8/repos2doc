@@ -20,10 +20,8 @@ npm install -g repos2doc
 repos2doc
 ```
 
-3. Use as Example: `a6b8/repos2doc, a6b8/satNames` which create a document, out of 2 repositories
-
-
-Example: `a6b8/repos2doc, a6b8/satNames`
+3. Use as Example: `a6b8/repos2doc/main, a6b8/satNames/main` which create a document, out of 2 repositories
+4. 
 
 ```
   _____                      ___  _____             
@@ -38,7 +36,7 @@ Example: `a6b8/repos2doc, a6b8/satNames`
 Insert Repositories
   - Use following structure: "name/repo/branch"
   - For multiple repositories, separate them with a comma "name/repo/branch, name/repo/branch"
-? >
+? > a6b8/repos2doc/main, a6b8/satNames/main
 ```
 
 
