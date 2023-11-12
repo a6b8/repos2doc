@@ -20,7 +20,7 @@ npm install -g repos2doc
 repos2doc
 ```
 
-3. Type in: `a6b8/repos2doc/main, a6b8/satNames/main` which create a document, out of 2 repositories
+3. Types: `a6b8/repos2doc/main, a6b8/satNames/main` which create a document from two repositories.
 
 ```
   _____                      ___  _____             
