@@ -245,9 +245,6 @@ export class Repos2Doc {
             messages.push( `Key "repositories" is not type of "string" or "array of strings".` )
         }
 
-
-
-
         return [ messages, comments ]
     }
 

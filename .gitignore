@@ -3,3 +3,4 @@ node_modules
 package-lock.json
 repo2file
 repo2gpt
+dataTest

@@ -44,14 +44,20 @@ export class CLI {
         this.#addHealine()
         const repositories = await this.#questionRepositories( {} )
         const formats = await this.#questionFormats() 
-        await this.#questionLicense( { repositories } )
+        // await this.#questionLicense( { repositories } )
         console.log()
 
         const r2d = new Repos2Doc()
-        await r2d.getDocument( { 
+        const paths = await r2d.getDocument( { 
             repositories,
             formats 
         } )
+
+        paths
+            .forEach( ( path, index, all ) => {
+                index === 0 ? console.log( `\nDocument${ all.length > 1 ? 's' : '' }` ) : ''
+                console.log( `  - ${path}` )
+            } )
 
         return true
     }
@@ -107,6 +113,7 @@ export class CLI {
 
 
     async #questionRepositories( { str='' } ) {
+        console.log()
         console.log( `Insert Repositories`)
         console.log( `  - Use following structure: "name/repo/branch"`)
         console.log( `  - For multiple repositories, separate them with a comma "name/repo/branch, name/repo/branch"`)
@@ -148,6 +155,8 @@ export class CLI {
         } else {
             await this.#questionRepositories( { 'str': '' } )
         }
+
+        return cmds
     }
 
 

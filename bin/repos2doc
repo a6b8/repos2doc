@@ -3,15 +3,10 @@
 async function main( args ) {
     const { CLI } = await import( '../src/CLI.mjs' )
     const cli = new CLI()
-    cli.init( { 
-        'rawArgs': process.argv 
-    } )
-
     await cli.start()
-
     return true
 }
 
 main()
-    .then( a => console.log( a ) )
-    .catch( e => console.log(  e ) )
+    .then( a => a )
+    .catch( e => console.log( e ) )
