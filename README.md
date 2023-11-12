@@ -8,6 +8,29 @@ Repo2Docs assists in preparing one or multiple GitHub repositories to consolidat
 
 ## Quickstart
 
+### Command Line Interface
+
+```
+npm -g i repos2doc
+repos2doc
+```
+
+```
+  _____                      ___  _____             
+ |  __ \                    |__ \|  __ \            
+ | |__) |___ _ __   ___  ___   ) | |  | | ___   ___ 
+ |  _  // _ \ '_ \ / _ \/ __| / /| |  | |/ _ \ / __|
+ | | \ \  __/ |_) | (_) \__ \/ /_| |__| | (_) | (__ 
+ |_|  \_\___| .__/ \___/|___/____|_____/ \___/ \___|
+            | |                                     
+            |_|                                     
+
+Insert Repositories
+```
+
+
+### Node.js
+
 **Terminal**
 ```bash
 npm init -y && npm i repos2doc
@@ -37,6 +60,8 @@ node index.mjs
 
 - [Repos 2 Doc](#repos-2-doc)
   - [Quickstart](#quickstart)
+    - [Command Line Interface](#command-line-interface)
+    - [Node.js](#nodejs)
   - [Table of Contents](#table-of-contents)
   - [Methods](#methods)
     - [getDocument()](#getdocument)
