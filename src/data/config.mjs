@@ -1,19 +1,16 @@
-import moment from 'moment'
-
-
-let config = {
+const config = {
     'meta': {
-        'unix': moment().unix(), 
-        'format': moment().format()
+        'unix': null,
+        'format': null
     },
     'path': {
-        'root': './repo2gpt-temp',
-        'route': './repo2gpt-temp/{{userName}}/{{repository}}/{{branch}}/',
+        'root': './repos2doc-temp',
+        'route': './repos2doc-temp/{{userName}}/{{repository}}/{{branch}}/',
         'raw': 'raw/',
         'pdf': ''
     },
     'merge': {
-        'root': './repo2gpt-temp',
+        'root': './repos2doc-temp',
         'outputFormat': '{{name}}--{{timestamp}}.{{suffix}}'
     },
     'output': {

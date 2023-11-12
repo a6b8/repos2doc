@@ -1,7 +1,7 @@
-
-import arg from 'arg'
 import inquirer from 'inquirer'
 import figlet from 'figlet'
+import { Repos2Doc } from './Repos2Doc.mjs'
+import { getTableInAscii } from './helper/utils.mjs'
 
 
 export class CLI {
@@ -9,12 +9,23 @@ export class CLI {
 
     constructor() {
         this.#config = {
+            'tables': {
+                'repositories': {
+                    'headlines': [ 'User Name', 'Repository Name', 'Branch Name' ]
+                }
+            },
             'validation': {
                 'repositories': {
                     'type': 'arrayOfStrings',
                 },
-                'outputs': {
-                    'type': 'arrayOfStrings'
+                'formats': {
+                    'type': 'arrayOfStrings',
+                    'alias': {
+                        'txt': 'Text',
+                        'md': 'Markdown',
+                        'pdf': 'Pdf'
+                        
+                    }
                 },
                 'name': {
                     'type': 'string'
@@ -29,23 +40,84 @@ export class CLI {
     }
 
 
-    init( { rawArgs } ) {
-        // this.#addArgs( { rawArgs } )
+    async start() {
+        this.#addHealine()
+        const repositories = await this.#questionRepositories( {} )
+        const formats = await this.#questionFormats() 
+        await this.#questionLicense( { repositories } )
+        console.log()
+
+        const r2d = new Repos2Doc()
+        await r2d.getDocument( { 
+            repositories,
+            formats 
+        } )
 
         return true
     }
 
 
-    async start() {
-        this.#addHealine()
+    async #areYouSure( { msg } ) {
+        const response = await inquirer.prompt( [
+            {
+              'type': 'confirm',
+              'name': 'sure',
+              'message': msg,
+              'default': true
+            }
+        ] )
+
+        return response
+    }
+
+
+    async #questionFormats() {
+        console.log()
+        console.log( 'Choose Format' )
+        const questions = [
+            {
+                'type': 'checkbox',
+                'name': 'answer',
+                'message': 'Select one or more options:',
+                'choices': Object.values( this.#config['validation']['formats']['alias'] ),
+                'validate': (answer) => {
+                    if( answer.length === 0 ) {
+                        return 'You must select at least one option.'
+                    }
+                    return true
+                }
+            }
+        ]
+
+        const response = await inquirer.prompt( questions )
+        const convert = Object
+            .entries( this.#config['validation']['formats']['alias'] )
+            .reduce( ( acc, a, index ) => { 
+                const [ key, value ] = a 
+                acc[ value ] = key 
+
+                return acc
+            }, {} )
+
+        const cmds = response['answer']
+            .map( key => convert[ key ] )
+
+        return cmds
+    }
+
+
+    async #questionRepositories( { str='' } ) {
+        console.log( `Insert Repositories`)
+        console.log( `  - Use following structure: "name/repo/branch"`)
+        console.log( `  - For multiple repositories, separate them with a comma "name/repo/branch, name/repo/branch"`)
 
         const questions = [
             {
                 'type': 'input',
-                'name': 'string1',
-                'message': 'Enter your Repositories:',
+                'name': 'answer',
+                'message': ">",
                 'validate': ( input ) => {
-                    const messages = this.#validateInput( { input } )
+                    const messages = this.#validateInputRepositories( { input } )
                     if( messages.length !== 0 ) {
                         return messages.join( "\n" )
                     } else {
@@ -55,46 +127,87 @@ export class CLI {
             }
         ]
 
-        const answers = await inquirer.prompt( questions )
-        const strings = [ answers.string1, answers.string2 ] // Add more strings as needed
-      
-        console.log('Entered strings:', strings);
+        const response = await inquirer.prompt( questions )
 
+        const cmds = response['answer']
+            .trim()
+            .split( ',' )
+            .map( a => a.trim() )
+
+        const table = getTableInAscii( { 
+            'headlines': this.#config['tables']['repositories']['headlines'] , 
+            'items': cmds.map( a => a.split( '/' ) )
+        } )
+
+        console.log()
+        console.log( table )
+
+        const ok = await this.#areYouSure( { 'msg': 'Ok?' } )
+        if( ok['sure'] ) {
+            return cmds
+        } else {
+            await this.#questionRepositories( { 'str': '' } )
+        }
     }
 
 
-    #validateInput( { input } ) {
+    async #questionLicense( { repositories } ) {
+        console.log()
+        console.log( 'Check Licenses')
+        console.log( '  - Please verify the repository licenses to ensure they are suitable for A.I. usage.' )
+        repositories
+            .forEach( ( a, index ) => {
+                const [ userName, repoName, brachName ] = a.split( '/' )
+                let str = ''
+                str += 'https://github.com/'
+                str += userName + '/'
+                str += repoName + '/'
+                str += 'blob/'
+                str += brachName + '/'
+                str += 'LICENSE'
+                console.log( `  - [${index + 1}] ${str}` ) 
+            } )
+
+        console.log()
+        const ok = await this.#areYouSure( { 'msg': 'Are all the licenses suitable?' } )
+        if( !ok['sure'] ) {
+            process.exit( 1 )
+        }
+
+        return true
+    }   
+
+
+    #validateInputRepositories( { input } ) {
         let messages = [] 
         if( typeof input !== 'string' ) {
             messages.push( 'Is not string' )
-        }
-
-        if( input === '' ) {
+        } else if( input === '' ) {
             messages.push( 'input is empty' )
+        } else {
+            input
+                .trim()
+                .split( ',' )
+                .map( a => a.trim() )
+                .forEach( ( cmd, rindex ) => {
+                    const matches = cmd.match( /\//g )
+                    const count = matches ? matches.length : 0
+                    if( count !== 2 ) {
+                        messages.push( `[${rindex}] ${cmd} expect 2 slashes "/".`)
+                    } else {
+                        const keys = cmd
+                            .split( '/' )
+                            .forEach( ( key, index ) => {
+                                const names = [ 'userName', 'repositoryName', 'branchName' ]
+                                if( key === '' || key === undefined ) {
+                                    messages.push( `[${rindex}] ${names[index]} is not set`)
+                                } else {
+
+                                }
+                            } )
+                    }
+                } )
         }
-
-        const cmds = input.trim()
-        cmds
-            .split( ',' )
-            .map( a => a.trim() )
-            .forEach( ( cmd, rindex ) => {
-                const matches = cmd.match( /\//g )
-                const count = matches ? matches.length : 0
-                if( count !== 2 ) {
-                    messages.push( `[${rindex}] ${cmd} expect 2 slashes "/".`)
-                } else {
-                    const keys = cmd
-                        .split( '/' )
-                        .forEach( ( key, index ) => {
-                            const names = [ 'userName', 'repositoryName', 'branchName' ]
-                            if( key === '' || key === undefined ) {
-                                messages.push( `[${rindex}] ${names[index]} is not set`)
-                            } else {
-
-                            }
-                        } )
-                }
-            } )
 
         return messages
     }
@@ -103,7 +216,7 @@ export class CLI {
     #addHealine() {
         console.log(
             figlet.textSync(
-                "Repo4GPT", 
+                "Repos2Doc", 
                 {
                     font: "big",
                     horizontalLayout: "default",
@@ -114,25 +227,6 @@ export class CLI {
             )
         )
         return true
-    }
-
-
-    #addArgs( { rawArgs } ) {
-        const fromCli = arg(
-            {
-                '--repositories': String,
-                '-r': '--repositories',
-                '--verbose': ''
-            },
-            {
-              'argv': rawArgs.slice( 2 ),
-              'permissive': true
-            }
-        )
-
-        const params = this.#getModuleParams( { fromCli } )
-        
-        return params
     }
 
 
@@ -159,7 +253,6 @@ export class CLI {
 
                 return acc
             }, {} )
-console.log( 'params', params  )
         return params
     }
 }

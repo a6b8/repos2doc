@@ -1,11 +1,14 @@
-import { Repo4GPT } from '../src/Repo4GPT.mjs'
+import { Repos2Doc } from '../src/Repos2Doc.mjs'
 import { tests } from './data/config.mjs'
 
-const r4g = new Repo4GPT()
+const r2d = new Repos2Doc( true)
 
-await r4g.getFile( { 
+const a = await r2d.getDocument( { 
     'repositories': tests['easymina'][ 0 ],
     'name': 'merge',
-    'outputs': [ 'md', 'txt', 'pdf' ],
+    'formats': [ 'md', 'txt', 'pdf' ],
     'destinationFolder': './dataTest/'
 } )
+
+
+console.log( 'paths', a )

@@ -32,7 +32,7 @@ export class Merge {
                 return acc
             }, this.#config['merge']['outputFormat'] )
 
-        const status = 'Process'
+        const status = 'Merge'
         let space = ''
         try {
             space = new Array( this.#config['console']['space'] - status.length )
@@ -40,7 +40,7 @@ export class Merge {
                 .join( '' )
         } catch( e ) {}
 
-        !this.#silent ? process.stdout.write( `  ${status}${space} | ` ) : ''
+        !this.#silent ? process.stdout.write( `${status}    ${space} | ` ) : ''
         const files = this.#getFilesRecursively( this.#config['path']['root'] )
 
         const filesBySuffix = this.#getFilesBySuffix( { 
@@ -56,10 +56,9 @@ export class Merge {
 
 
     #mergeFiles( files ) {
-        // console.log( '>>>', files )
         this.#state['files'] = Object
             .entries( files )
-          //   .filter( a => a[ 0 ] === 'md' || a[ 0 ] === 'txt' )
+        //  .filter( a => a[ 0 ] === 'md' || a[ 0 ] === 'txt' )
             .map( ( a ) => {
                 !this.#silent ? process.stdout.write( `${a[ 0 ]} ` ) : ''
                 const [ key, values ] = a
@@ -67,9 +66,8 @@ export class Merge {
                     .map( b => fs.readFileSync( b, 'utf-8' ) )
                     .join( "\n\n" )
 
-                const fileName = this.#state['outputName'].replace( 
-                    '{{suffix}}', key
-                )
+                const fileName = this.#state['outputName']
+                    .replace( '{{suffix}}', key )
 
                 let _path = ''
                 _path += `${this.#config['merge']['root']}/`
@@ -78,7 +76,7 @@ export class Merge {
                 fs.writeFileSync( _path, content, 'utf-8' )
                 return _path
             } )
-// console.log( this.#state['files'] )
+
         return true
     }
 
@@ -92,7 +90,7 @@ export class Merge {
             }
         }
 
-        !this.#silent ? process.stdout.write( `pdf  ` ) : ''
+       // !this.#silent ? process.stdout.write( `pdf  ` ) : ''
 
         const pdfDoc = await PDFDocument.create()
       
@@ -113,7 +111,6 @@ export class Merge {
         let _path = ''
         _path += `${this.#config['merge']['root']}/`
         _path += `${fileName}`
-
 
         fs.writeFileSync( _path, mergedPdfBytes )
 
@@ -177,12 +174,10 @@ export class Merge {
             process.exit( 1 )
         }
 
- 
-        this.#state['files']
-            .forEach( sourceFilePath => {
-                this.#cleanUpTempFile( { sourceFilePath, destinationFolder } )
+        const paths = this.#state['files']
+            .map( sourceFilePath => {
+                return this.#cleanUpTempFile( { sourceFilePath, destinationFolder } )
             } )  
-
 
         const sourceFolder = this.#config['path']['root']
         if( fs.existsSync( sourceFolder ) ) {
@@ -194,7 +189,7 @@ export class Merge {
 
         // console.log( 'File moved successfully.' )
 
-        return true
+        return paths
     }
 
 
@@ -222,15 +217,15 @@ export class Merge {
             sourceFilePath.split( '/' ).pop() 
         )
 
-        console.log( targetFilePath )
+        // console.log( targetFilePath )
 
         if( fs.existsSync( targetFilePath ) ) {
             console.error( 'File already exists at the target path.' )
         }
 
-        console.log( `From ${sourceFilePath}, To: ${targetFilePath}`)
+        // console.log( `From ${sourceFilePath}, To: ${targetFilePath}`)
         fs.renameSync( sourceFilePath, targetFilePath )
         
-        return true
+        return targetFilePath
     }
 }

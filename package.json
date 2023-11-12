@@ -1,13 +1,13 @@
 {
-  "name": "repo4gpt",
+  "name": "repos2doc",
   "version": "0.0.1",
-  "description": "Repo4GPT streamlines GitHub repositories into a single file in `text (.txt)`, `markdown (.md)`, or `pdf (.pdf)` format, facilitating uploads to the OpenAI GPT editor for question answering and code generation. Valuable for swiftly evolving software.",
-  "main": "src/Repo4GPT.mjs",
+  "description": "Repos2Doc streamlines GitHub repositories into a single file in `text (.txt)`, `markdown (.md)`, or `pdf (.pdf)` format, facilitating uploads to the OpenAI GPT editor for question answering and code generation. Valuable for swiftly evolving software.",
+  "main": "src/Repos2Doc.mjs",
   "publishConfig": {
     "access": "public"
   },
   "bin": {
-    "repo4gpt": "bin/repo4gpt"
+    "repos2doc": "bin/repos2doc"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,7 +15,8 @@
   "keywords": [
     "chatgpt",
     "ai",
-    "gpt"
+    "gpt",
+    "github"
   ],
   "author": "a6b8",
   "license": "MIT",

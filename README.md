@@ -1,8 +1,8 @@
-![CircleCI](https://img.shields.io/circleci/build/github/a6b8/repo2GPT/main)
+![CircleCI](https://img.shields.io/circleci/build/github/a6b8/repos2doc/main)
 
-# Repo 4 GPT
+# Repos 2 Doc
 
-Repo4GPT assists in preparing one or multiple GitHub repositories to consolidate their content into a single file. This file can be in one of the following formats: `text (.txt)`, `markdown (.md)`, or `pdf (.pdf)`. You can then upload this file to the OpenAI GPT editor as a searchable document. This enables the AI to answer questions based on the document's content and even generate code. This can be especially valuable for very new software with rapid update cycles.
+Repo2Docs assists in preparing one or multiple GitHub repositories to consolidate their content into a single file. This file can be in one of the following formats: `text (.txt)`, `markdown (.md)`, or `pdf (.pdf)`. You can then upload this file to the OpenAI GPT editor as a searchable document. This enables the AI to answer questions based on the document's content and even generate code. This can be especially valuable for very new software with rapid update cycles.
 
 > Designed for AI Embedding Generation
 
@@ -10,17 +10,16 @@ Repo4GPT assists in preparing one or multiple GitHub repositories to consolidate
 
 **Terminal**
 ```bash
-npm init -y && npm i repo4gpt
+npm init -y && npm i repos2doc
 ```
 
 **Node**
 index.mjs
 
 ```js
-import { Repo4GPT } from 'repo4gpt'
+import { Repo2Docs } from 'repos2doc'
 
-const r4g = new Repo4GPT()
-
+const r4g = new Repo2Docs()
 await r4g.getDocument( {
     'repositories': [
         'EasyMina/easyMina/main',
@@ -36,7 +35,7 @@ node index.mjs
 
 ## Table of Contents
 
-- [Repo 4 GPT](#repo-4-gpt)
+- [Repos 2 Doc](#repos-2-doc)
   - [Quickstart](#quickstart)
   - [Table of Contents](#table-of-contents)
   - [Methods](#methods)
@@ -54,15 +53,15 @@ This method downloads the data, saves it in a temporary folder, then combines al
 | ---------------- | --------------------- | ----------------------------------------------------- | -------- |
 | repositories     | `Array of Strings`    | GitHub repositories in the format "userName/repositoryName/branchName" | `true`     |
 | name             | `String`              | Custom name                                           | `false`    |
-| outputs          | `Array of Strings`    | At least one value from: "txt", "md", "pdf"           | `false`    |
+| formats          | `Array of Strings`    | At least one value from: "txt" (text), "md" (markdown), "pdf" (pdf)           | `false`    |
 | destinationFolder  | `String`              | Path starting with "./"                               | `false`    |
 
 **Example**
 
 ```js
-import { Repo4GPT } from 'repo4gpt'
+import { Repo2Docs } from 'repos2doc'
 
-const r4g = new Repo4GPT()
+const r4g = new Repo2Docs()
 
 await r4g.getDocument( {
     'repositories': [
@@ -71,7 +70,7 @@ await r4g.getDocument( {
     ],
     'name': 'mina',
     'destinationFolder': './dataTest/',
-    'outputs': [ 'txt', 'md', 'pdf' ],
+    'formats': [ 'txt', 'md', 'pdf' ],
 } )
 ```
 
@@ -80,16 +79,16 @@ await r4g.getDocument( {
 All module settings are stored in a config file, see [./src/data/config.mjs](./src/data/config.mjs). This file can be completely overridden by passing an object during initialization.
 
 ```js
-import { Repo4GPT } from 'repo4gpt'
+import { Repo2Docs } from 'repos2doc'
 
 const myOwnConfig = {
     // Your custom configuration here
 }
 
-const r4g = new Repo4GPT()
+const r4g = new Repo2Docs()
 r4g.setConfig( myOwnConfig ).getDocument( { ... } )
 ```
 
 ## License
 
-The module is available as open source under the terms of the [MIT License](https://github.com/a6b8/repo4gpt/blob/main/LICENSE).
+The module is available as open source under the terms of the [MIT License](https://github.com/a6b8/repos2doc/blob/main/LICENSE).

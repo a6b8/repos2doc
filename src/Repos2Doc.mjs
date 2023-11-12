@@ -4,108 +4,99 @@ import { Convert } from './steps/Convert.mjs'
 import { Merge } from './steps/Merge.mjs'
 
 import { printMessages } from './helper/utils.mjs'
+import moment from 'moment'
 
 
-export class Repo4GPT {
+export class Repos2Doc {
     #config
     #state
     #silent
 
 
-    constructor() {
-        this.#config = config
+    constructor( silent=false ) {
+        this.#silent = silent
+        this.setConfig( { config } )
 
         return true
     }
 
 
-    async getFile( { repositories, name='default', silent=false, outputs=[ 'txt' ], destinationFolder='./' } ) {
-        const [ messages, comments ] = this.#validateGetResult( { repositories, name, silent, outputs, destinationFolder } )
+/**
+     * Async function to get a document from a set of repositories.
+     *
+     * @param {Object[]} repositories - An array of repositories With the structure "userName/repositoryName/branchName".
+     * @param {string} [name='default'] - The name of the document to retrieve (default is 'default').
+     * @param {string[]} [formats=['txt']] - An array of acceptable document formats (default is ['txt']).
+     * @param {string} [destinationFolder='./'] - The folder where the document should be saved (default is './').
+     * @returns {Promise} A Promise that resolves to the retrieved document. Return the destinationPath for the generated files.
+*/
+
+    async getDocument( { repositories, name='default', formats=[ 'txt' ], destinationFolder='./' } ) {
+        ( typeof repositories === 'string' ) ? repositories = [ repositories ] : ''
+
+        const [ messages, comments ] = this.#validateGetDocument( { repositories, name, formats, destinationFolder } )
         printMessages( { messages, comments } )
 
-        this.#silent = silent
-        outputs.forEach( key => {
-            this.#config['output'][ key ]['use'] = true
-        } )
+        formats.forEach( key => { this.#config['output'][ key ]['use'] = true } )
+        const cmds = await this.#prepareCmds( { repositories } )
 
-        !this.#silent ? console.log( 'Repo 4 Gpt' ) : ''
-        if( typeof repositories === 'string' ) {
-            
-           // !this.#silent ? console.log( '  Download' ) : ''
-            await this.#single( { 
-                'githubRepository': repositories, 
-                silent
-            } )
-
-            await this.#merge( { name, destinationFolder } )
-        } else if (
-            Array.isArray( repositories ) && 
-            repositories.every( item => typeof item === 'string' ) 
-        ) {
-           // !this.#silent ? console.log( '  Download' ) : ''
-            await this.#batch( {
-                'githubRepositories': repositories
-            })
-            await this.#merge( { name, destinationFolder } )
-        } else {
-            console.log( `Unknown Error.` )
-            process.exit( 1 )
+        !this.#silent ? console.log( 'Process' ) : ''
+        for( let cmd of cmds ) {
+            await this.#generate( { ...cmd } )
         }
 
-        return true
+        const paths = await this.#merge( { name, destinationFolder } )
+
+        return paths
     }
 
 
-    setConfig( config ) {
+/**
+     * Sets the configuration object for the instance.
+     *
+     * @param {Object} options - An object containing the configuration to be set.
+     * @param {Object} options.config - The configuration object to set.
+     * @returns {this} The current instance with the updated configuration.
+*/
+
+    setConfig( { config } ) {
+        const [ messages, comments ] = this.#validateSetConfig( { config } )
+        printMessages( { messages, comments } )
+
+        config['meta'] = [
+            [ 'unix', moment().unix() ],
+            [ 'format', moment().format() ] 
+        ]
+            .reduce( ( acc, a, index ) => {
+                const [ key, value ] = a 
+                acc[ key ] = value
+                return acc
+            }, {} )
+
         this.#config = config
         return this
     }
 
-
+/*
     async #single( { githubRepository=null } ) {
         const [ messages, comments ] = this.#validateGithubString( { githubRepository, 'index': 0 } )
         printMessages( { messages, comments } )
-        
+
         const { userName, repository, branch } = this.#getGithubVariables( { githubRepository } )
         await this.#generate(  { userName, repository, branch } )
 
         return true
     }
+*/
 
-
-    async #batch( { githubRepositories } ) {
-        const test = githubRepositories
-            .reduce( ( acc, a, index, all ) => {
-                const [ messages, comments ] = this.#validateGithubString( { 
-                    'githubRepository': a, 
-                    'index': index 
-                } )
-
-                acc['messages'].push( messages )
-                acc['comments'].push( comments )
-                if( all.length -1 === index ) { 
-                    acc['messages'] = acc['messages'].flat( 1 )
-                    acc['comments'] = acc['comments'].flat( 1 )
-                }
-                return acc
-            }, { 'messages': [], 'comments': [] } )
-
-        printMessages( { 
-            'messages': test['messages'], 
-            'comments': test['comments']
-        } )
-
-        const cmds = githubRepositories
+    async #prepareCmds( { repositories } ) {
+        const cmds = repositories
             .reduce( ( acc, githubRepository, index ) => {
                 acc.push( this.#getGithubVariables( { githubRepository } ) )
                 return acc
             }, [] )
 
-        for( let cmd of cmds ) {
-            await this.#generate( { ...cmd } )
-        }
-
-        return true
+        return cmds
     }
 
 
@@ -117,14 +108,12 @@ export class Repo4GPT {
             'name': name 
         } )
 
-
-        merge.cleanUpTemp( { destinationFolder } )
-
-        return true
+        const paths = merge.cleanUpTemp( { destinationFolder } )
+        return paths
     }
 
 
-    async #generate(  { userName, repository, branch } ) {
+    async #generate( { userName, repository, branch } ) {
         const str = `${userName}/${repository}/${branch}`
 
         let space = ''
@@ -133,8 +122,8 @@ export class Repo4GPT {
                 .fill( ' ' )
                 .join( '' )
         } catch( e ) {}
-        
-        !this.#silent ? process.stdout.write( `- ${str}${space} | ` ) : ''
+
+        !this.#silent ? process.stdout.write( `  - ${str}${space} | ` ) : ''
         const clone = new Clone( this.#config )
         const convert = new Convert( this.#config )
 
@@ -145,7 +134,7 @@ export class Repo4GPT {
             'silent': this.#silent
         } )
 
-        !this.#silent ? process.stdout.write( 'to document > ' ) : ''
+        !this.#silent ? process.stdout.write( 'file > ' ) : ''
         const a = await convert.start( { 
             userName, 
             repository, 
@@ -154,12 +143,36 @@ export class Repo4GPT {
             'silent': this.#silent 
         } )
 
-        !this.#silent ? console.log( 'clean up.' ) : ''
+        !this.#silent ? console.log( 'clean |' ) : ''
         clone.cleanUpTemp()
     }
 
 
-    #validateGetResult( { repositories, name, silent, outputs, destinationFolder } ) {
+    #validateSetConfig( { config } ) {
+        let messages = []
+        let comments = []
+
+        if( typeof config === 'object' && config !== null ) {
+            if( Object.hasOwn( config, 'meta' ) ) {
+            } else {
+                messages.push( `Config has not key "meta".` )
+            }
+        } else {
+            messages.push( `Config is not type object.`)
+        }
+
+        messages
+            .forEach( ( msg, index, all ) => {
+                index === 0 ? console.log( `Error:` ) : ''
+                console.log( msg )
+                all.length - 1 === index ? process.exit( 1 ) : ''
+            } )
+
+        return messages
+    }
+
+
+    #validateGetDocument( { repositories, name, formats, destinationFolder } ) {
         const messages = []
         const comments = []
 
@@ -173,31 +186,32 @@ export class Repo4GPT {
             messages.push( `Key "destinationFolder" is not type of "string".` )
         }
 
-        if( Array.isArray( outputs ) ) {
+        if( Array.isArray( formats ) ) {
             const keys = Object.keys( this.#config['output'] )
-            if( outputs.length === 0 ) {
-                messages.push( `Key "outputs" is empty, choose from ${keys.map(a => `"${a}"`).join(', ')} `)
+            if( formats.length === 0 ) {
+                messages.push( `Key "formats" is empty, choose from ${keys.map(a => `"${a}"`).join(', ')} `)
             }
 
-            if( outputs.every( item => typeof item === 'string' ) === true ) {
-                outputs.forEach( op => {
+            if( formats.every( item => typeof item === 'string' ) === true ) {
+                formats.forEach( op => {
                     if( !keys.includes( op ) ) {
-                        messages.push( `Key "outputs", value "${op}" is not valid. Choose from ${keys.map(a => `"${a}"`).join(', ')} instead.` )
+                        messages.push( `Key "formats", value "${op}" is not valid. Choose from ${keys.map(a => `"${a}"`).join(', ')} instead.` )
                     }
                 } )
 
             } else {
-                messages.push( `Key "outputs" expects "string" as type.`)
+                messages.push( `Key "formats" expects "string" as type.`)
             }
 
         } else {
-            messages.push( `Key "outputs" is not type of "array of strings".` )
+            messages.push( `Key "formats" is not type of "array of strings".` )
         }
 
 
-        if( typeof silent !== 'boolean' ) {
+        if( typeof this.#silent !== 'boolean' ) {
             messages.push( `Key "silent" is not type of boolean.` )
         }
+
 
         if( typeof name !== 'string' ) {
             messages.push( `Key "name" is not type of string.` )
@@ -206,13 +220,33 @@ export class Repo4GPT {
         if( typeof repositories === 'string' ) {
         } else if ( Array.isArray( repositories ) ) {
             if( repositories.every( item => typeof item === 'string' ) ) {
+                const test = repositories
+                    .reduce( ( acc, a, index, all ) => {
+                        const [ messages, comments ] = this.#validateGithubString( { 
+                            'githubRepository': a, 
+                            'index': index 
+                        } )
+        
+                        acc['messages'].push( messages )
+                        acc['comments'].push( comments )
+                        if( all.length -1 === index ) { 
+                            acc['messages'] = acc['messages'].flat( 1 )
+                            acc['comments'] = acc['comments'].flat( 1 )
+                        }
+                        return acc
+                    }, { 'messages': [], 'comments': [] } )
 
+                messages.push( ...test['messages'] )
+                comments.push( ...test['comments'] )
             } else {
                 messages.push( `Key "repositories" (array) expects variables in type "string".` )
             }
         } else {
             messages.push( `Key "repositories" is not type of "string" or "array of strings".` )
         }
+
+
+
 
         return [ messages, comments ]
     }

@@ -105,12 +105,12 @@ export class Clone {
                 return acc
             }, this.#config['github']['download'] )
 
-        !this.#silent ? process.stdout.write( 'download .zip > '  ) : ''
+        !this.#silent ? process.stdout.write( 'download > '  ) : ''
         const zip = await this.#download( { url } )
         const path = this.#state['folderRaw'] + 'tmp.zip'
         fs.writeFileSync( path, zip )
 
-        !this.#silent ? process.stdout.write( 'decompress .zip > '  ) : ''
+        !this.#silent ? process.stdout.write( 'decompress > '  ) : ''
         await decompress( path, this.#state['folderRaw'] )
 
         return true

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 async function main( args ) {
-    const { CLI } = await import( './../src/CLI.mjs' )
+    const { CLI } = await import( '../src/CLI.mjs' )
     const cli = new CLI()
     cli.init( { 
         'rawArgs': process.argv 
