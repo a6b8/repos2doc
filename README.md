@@ -15,6 +15,8 @@ npm install -g repos2doc
 repos2doc
 ```
 
+Example: `a6b8/repos2doc, a6b8/satNames`
+
 ```
   _____                      ___  _____             
  |  __ \                    |__ \|  __ \            
@@ -26,7 +28,9 @@ repos2doc
             |_|                                     
 
 Insert Repositories
-...
+  - Use following structure: "name/repo/branch"
+  - For multiple repositories, separate them with a comma "name/repo/branch, name/repo/branch"
+? >
 ```
 
 
