@@ -11,9 +11,6 @@ const a = await r2d.getDocument( {
     'options': [
         {
             'description': "this is a test\n\nthis is a test\n\›this is a test"
-        },
-        {
-            'description': "this is a test\n\nthis is a test\n\›this is a test"
         }
     ]
 } )
