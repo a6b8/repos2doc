@@ -17,7 +17,7 @@ export class Convert {
     }
 
 
-    async start( { userName, repository, branch, files } ) {
+    async start( { userName, repository, branch, files, option } ) {
         this.#state = {
             'filesFiltered': null,
             'folderRaw': null,
@@ -25,6 +25,7 @@ export class Convert {
             'userName': userName,
             'repository': repository,
             'branch': branch,
+            'option': option
         }
 
         const _path = Object
@@ -81,6 +82,13 @@ export class Convert {
         contents += "  \n"
         contents += `date: ${this.#config['meta']['format']} (${this.#config['meta']['unix']})` 
         contents += "  \n"  
+
+        if( Object.hasOwn( this.#state['option'], 'description' ) ) {
+            contents += "description:\n"
+            contents += this.#state['option']['description']
+            contents += "\n\n"
+        }
+
         contents += "  \n"
         files
             .forEach( ( file, index ) => {

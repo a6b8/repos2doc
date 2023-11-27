@@ -91,6 +91,7 @@ This method downloads the data, saves it in a temporary folder, then combines al
 | name             | `String`              | Custom name                                           | `false`    |
 | formats          | `Array of Strings`    | At least one value from: "txt" (text), "md" (markdown), "pdf" (pdf)           | `false`    |
 | destinationFolder  | `String`              | Path starting with "./"                               | `false`    |
+| options  | `Array of Objects`              | Insert additional content, currently only supported key 'description'. Will insert between overview and file cvontent. content                               | `false`    |
 
 **Example**
 

@@ -31,14 +31,14 @@ export class Repos2Doc {
      * @returns {Promise} A Promise that resolves to the retrieved document. Return the destinationPath for the generated files.
 */
 
-    async getDocument( { repositories, name='default', formats=[ 'txt' ], destinationFolder='./' } ) {
+    async getDocument( { repositories, name='default', formats=[ 'txt' ], destinationFolder='./', options=[] } ) {
         ( typeof repositories === 'string' ) ? repositories = [ repositories ] : ''
 
-        const [ messages, comments ] = this.#validateGetDocument( { repositories, name, formats, destinationFolder } )
+        const [ messages, comments ] = this.#validateGetDocument( { repositories, name, formats, destinationFolder, options } )
         printMessages( { messages, comments } )
 
         formats.forEach( key => { this.#config['output'][ key ]['use'] = true } )
-        const cmds = await this.#prepareCmds( { repositories } )
+        const cmds = await this.#prepareCmds( { repositories, options } )
 
         !this.#silent ? console.log( 'Process' ) : ''
         for( let cmd of cmds ) {
@@ -89,10 +89,19 @@ export class Repos2Doc {
     }
 */
 
-    async #prepareCmds( { repositories } ) {
+    async #prepareCmds( { repositories, options } ) {
         const cmds = repositories
             .reduce( ( acc, githubRepository, index ) => {
-                acc.push( this.#getGithubVariables( { githubRepository } ) )
+                const struct = {
+                    ...this.#getGithubVariables( { githubRepository } ),
+                    'option': {}
+                }
+
+                if( options.length !== 0 ) {
+                    struct['option'] = options[ index ]
+                }
+
+                acc.push( struct )
                 return acc
             }, [] )
 
@@ -113,7 +122,7 @@ export class Repos2Doc {
     }
 
 
-    async #generate( { userName, repository, branch } ) {
+    async #generate( { userName, repository, branch, option } ) {
         const str = `${userName}/${repository}/${branch}`
 
         let space = ''
@@ -140,7 +149,8 @@ export class Repos2Doc {
             repository, 
             branch, 
             files, 
-            'silent': this.#silent 
+            'silent': this.#silent,
+            option
         } )
 
         !this.#silent ? console.log( 'clean |' ) : ''
@@ -172,7 +182,7 @@ export class Repos2Doc {
     }
 
 
-    #validateGetDocument( { repositories, name, formats, destinationFolder } ) {
+    #validateGetDocument( { repositories, name, formats, destinationFolder, options } ) {
         const messages = []
         const comments = []
 
@@ -243,6 +253,16 @@ export class Repos2Doc {
             }
         } else {
             messages.push( `Key "repositories" is not type of "string" or "array of strings".` )
+        }
+
+        if( messages.length === 0 ) {
+            if( !Array.isArray( options ) ) {
+                messages.push( `Key 'options' is not type of 'array'.` )
+            } else if( options.length === 0 ) {
+
+            } else if( options.length !== repositories.length ) {
+                messages.push( `Key 'options' can only have the length of '0' or the equal length of key 'repositories'.` )
+            }
         }
 
         return [ messages, comments ]
