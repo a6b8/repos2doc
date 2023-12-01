@@ -15,7 +15,7 @@ config['files']['test'] = [
 
 repos2doc.getDocument( {
     'repositories': [ 'ordinals/ord/gh-pages' ],
-    'name': 'mina',
+    'name': 'ord',
     'destinationFolder': './result/docs/',
     'formats': [ 'pdf', 'txt', 'md' ],
     'options': [ 

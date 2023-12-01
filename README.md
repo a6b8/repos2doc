@@ -94,7 +94,7 @@ This method downloads the data, saves it in a temporary folder, then combines al
 | destinationFolder  | `String`              | Path starting with "./"                               | `false`    |
 | options  | `Array of Objects`              | Insert additional content, currently only supported key 'description'. Will insert between overview and file cvontent. content                               | `false`    |
 
-Options can have following keys `description` and `filter`. Find more Information about filters here: [./src/data/config.mjs](./src/data/config.mjs)
+Options can have following keys `description` and `filter`. Find more Information about filters here: [./src/data/config.mjs]([./src/data/config.mjs](https://github.com/a6b8/repos2doc/blob/592b9418565126889c37760547a426bf54c3d039/src/data/config.mjs#L51))
 
 
 **Example**
@@ -174,7 +174,6 @@ repos2doc.getDocument( {
 } )
 
 ```
-
 
 
 ## License
