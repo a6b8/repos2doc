@@ -1,6 +1,6 @@
 {
   "name": "repos2doc",
-  "version": "0.0.3",
+  "version": "0.0.7",
   "description": "Repos2Doc streamlines GitHub repositories into a single file in `text (.txt)`, `markdown (.md)`, or `pdf (.pdf)` format, facilitating uploads to the OpenAI GPT editor for question answering and code generation. Valuable for swiftly evolving software.",
   "main": "src/Repos2Doc.mjs",
   "publishConfig": {

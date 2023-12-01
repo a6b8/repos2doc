@@ -41,7 +41,7 @@ export class Convert {
         this.#state['folderRaw'] = `${_path}${this.#config['path']['raw']}`
         this.#state['folderResults'] =  `${_path}${this.#config['path']['pdf']}`
 
-        const filtered = this.#addFilteredFiles( { files } )
+        const filtered = this.#addFilteredFiles( { files, option } )
         const { contents, txts } = this.#prepareFiles( { 'files': filtered } )
 
         await this.#save( { contents, txts } )
@@ -180,7 +180,7 @@ export class Convert {
         return { content, txt }
     }
 
-
+/*
     #addFilteredFiles( { files } ) {
         const result = files
             .filter( file => {
@@ -195,6 +195,63 @@ export class Convert {
                     .filter( b => str.endsWith( b.toLowerCase() ) )
                     .some( a => a )
             } )
+        
+        return result
+    }
+*/
+
+    #addFilteredFiles( { files, option } ) {
+        let use
+        if( Object.hasOwn( option, 'filter' ) ) {
+            use = option['filter']
+        } else {
+            use = this.#config['files']['use']
+        }
+
+        const result = this.#config['files'][ use ]
+            .reduce( ( acc, a, index ) => {
+                const { type, search, strings } = a
+                acc = acc
+                    .filter( file => {
+                        const s = file.toLowerCase()
+                        const test = strings
+                            .map( string => {
+                                let result
+                                switch( search ) {
+                                    case 'startsWith':
+                                        result = s.startsWith( string )
+                                        break
+                                    case 'endsWith': 
+                                        result = s.endsWith( string )
+                                        break
+                                    case 'includes':
+                                        result = ( s.indexOf( string ) != -1 )
+                                        break
+                                    default:
+                                        console.log( `Search ${search} not found.` )
+                                        process.exit( 1 )
+                                        break
+                                }
+                                return result
+                            } )
+                            .some( a => a )
+
+                        switch( type ) {
+                            case 'allow':
+                                return test
+                                break
+                            case 'block':
+                                return !test
+                                break
+                            default:
+                                console.log( `Type ${type} not found.` )
+                                process.exit( 1 )
+                                break
+                        }
+                    } )
+
+                return acc
+            }, files )
         
         return result
     }

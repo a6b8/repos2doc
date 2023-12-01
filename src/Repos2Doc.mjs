@@ -21,16 +21,6 @@ export class Repos2Doc {
     }
 
 
-/**
-     * Async function to get a document from a set of repositories.
-     *
-     * @param {Object[]} repositories - An array of repositories With the structure "userName/repositoryName/branchName".
-     * @param {string} [name='default'] - The name of the document to retrieve (default is 'default').
-     * @param {string[]} [formats=['txt']] - An array of acceptable document formats (default is ['txt']).
-     * @param {string} [destinationFolder='./'] - The folder where the document should be saved (default is './').
-     * @returns {Promise} A Promise that resolves to the retrieved document. Return the destinationPath for the generated files.
-*/
-
     async getDocument( { repositories, name='default', formats=[ 'txt' ], destinationFolder='./', options=[] } ) {
         ( typeof repositories === 'string' ) ? repositories = [ repositories ] : ''
 
@@ -51,14 +41,6 @@ export class Repos2Doc {
     }
 
 
-/**
-     * Sets the configuration object for the instance.
-     *
-     * @param {Object} options - An object containing the configuration to be set.
-     * @param {Object} options.config - The configuration object to set.
-     * @returns {this} The current instance with the updated configuration.
-*/
-
     setConfig( { config } ) {
         const [ messages, comments ] = this.#validateSetConfig( { config } )
         printMessages( { messages, comments } )
@@ -77,17 +59,11 @@ export class Repos2Doc {
         return this
     }
 
-/*
-    async #single( { githubRepository=null } ) {
-        const [ messages, comments ] = this.#validateGithubString( { githubRepository, 'index': 0 } )
-        printMessages( { messages, comments } )
 
-        const { userName, repository, branch } = this.#getGithubVariables( { githubRepository } )
-        await this.#generate(  { userName, repository, branch } )
-
-        return true
+    getConfig() {
+        return this.#config
     }
-*/
+
 
     async #prepareCmds( { repositories, options } ) {
         const cmds = repositories

@@ -34,12 +34,12 @@ const config = {
     'markdown': {
         'code': '~~~',
         'file': {
-            'open': '<file>',
-            'close': '</file>'
+            'open': '<file-KHpfyMeHcdMZN7NxZAJZHvpBs4u4vBcHUGpUQTJsu8>',
+            'close': '</file-KHpfyMeHcdMZN7NxZAJZHvpBs4u4vBcHUGpUQTJsu8>'
         },
         'repo': {
-            'open': '<repository>',
-            'close': '</repository>'
+            'open': '<repository-KHpfyMeHcdMZN7NxZAJZHvpBs4u4vBcHUGpUQTJsu8>',
+            'close': '</repository-KHpfyMeHcdMZN7NxZAJZHvpBs4u4vBcHUGpUQTJsu8>'
         },
         'replaces': [
             [ "`", "&nbsp;" ]
@@ -48,39 +48,60 @@ const config = {
         'markdownEscape': false,
         'fileName': 'https://github.com/{{userName}}/{{repository}}/blob/{{branch}}'
     },
-    'excludes': {
-        'fileNames': [
-            'licence',
-            'license',
-            'code_of_conduct.md',
-            '.gitignore',
-            '.gitmodules',
-            'package-lock.json',
-            'yarn.lock',
-            '.git',
-            '.vscode',
-            '.idea',
-            '.vs',
-            'node_modules',
-            '.ds_store'
+    'files': {
+        'use': 'standard',
+        'onlyText': [ 
+            {
+                'type': 'allow',
+                'search': 'endsWith',
+                'strings': [
+                    '.html',
+                    '.txt',
+                    '.md'
+                ] 
+            } 
         ],
-        'suffix': [
-            //'.md',
-            '.png',
-            '.yml',
-            '.jpg',
-            '.jpeg',
-            '.gif',
-            '.svg',
-            '.bmp',
-            '.webp',
-            '.ico',
-            '.mp4',
-            '.mov',
-            '.avi',
-            '.wmv',
-            '.pdf',
-            '.zip'
+        'standard': [ 
+            {
+                'type': 'block',
+                'search': 'includes',
+                'strings': [
+                    'licence',
+                    'license',
+                    'code_of_conduct.md',
+                    '.gitignore',
+                    '.gitmodules',
+                    'package-lock.json',
+                    'yarn.lock',
+                    '.git',
+                    '.vscode',
+                    '.idea',
+                    '.vs',
+                    'node_modules',
+                    '.ds_store'
+                ] 
+            },
+            {
+                'type': 'block',
+                'search': 'endsWith',
+                'strings': [
+                    '.png',
+                    '.yml',
+                    '.jpg',
+                    '.jpeg',
+                    '.gif',
+                    '.svg',
+                    '.bmp',
+                    '.webp',
+                    '.ico',
+                    '.mp4',
+                    '.mov',
+                    '.avi',
+                    '.wmv',
+                    '.pdf',
+                    '.zip'
+                ]
+            }
         ]
     },
     'console': {

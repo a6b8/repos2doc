@@ -77,6 +77,7 @@ node index.mjs
     - [getDocument()](#getdocument)
     - [setConfig()](#setconfig)
     - [constructor()](#constructor)
+  - [Options](#options)
   - [License](#license)
 
 ## Methods
@@ -92,6 +93,9 @@ This method downloads the data, saves it in a temporary folder, then combines al
 | formats          | `Array of Strings`    | At least one value from: "txt" (text), "md" (markdown), "pdf" (pdf)           | `false`    |
 | destinationFolder  | `String`              | Path starting with "./"                               | `false`    |
 | options  | `Array of Objects`              | Insert additional content, currently only supported key 'description'. Will insert between overview and file cvontent. content                               | `false`    |
+
+Options can have following keys `description` and `filter`. Find more Information about filters here: [./src/data/config.mjs](./src/data/config.mjs)
+
 
 **Example**
 
@@ -136,6 +140,41 @@ The constructor can be provided with a variable used to suppress the displayed t
 const silent = true
 const r2d = new Repos2Doc( silent )
 ```
+
+## Options
+
+**Example:**
+
+```js
+import { Repos2Doc } from 'repos2doc'
+const repos2doc = new Repos2Doc()
+
+const config = repos2doc.getConfig()
+config['files']['test'] = [
+    {
+        'type': 'allow',
+        'search': 'includes',
+        'strings': [
+            '404.html',
+        ]
+    }
+]
+
+repos2doc.getDocument( {
+    'repositories': [ 'ordinals/ord/gh-pages' ],
+    'name': 'ord',
+    'destinationFolder': './result/docs/',
+    'formats': [ 'pdf', 'txt', 'md' ],
+    'options': [ 
+        {
+            'description': 'this is a test!',
+            'filter': 'test'
+        }
+    ]
+} )
+
+```
+
 
 
 ## License
